@@ -1,0 +1,38 @@
+---
+title: Create a new Instance
+sidebar_label: Create instance
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+ Create a new Instance of Paytm SDK and pass all the necessary credentials to the Configuration
+ 
+<Tabs
+  defaultValue="javascript"
+  groupId="client-sdk"
+  values={[
+    {label: 'Javascript', value: 'javascript'},
+    
+  ]}>
+  <TabItem value="javascript">
+
+```javascript title="./instance/paytm"
+ 
+const paytm = new PaytmConfig({
+  PAYTM_ENVIRONMENT: "LIVE",
+  PAYTM_MERCHANT_KEY: "rBHSFqbQmGZJ1mu7",
+  PAYTM_MERCHANT_ID: "LwKutv58548207890301",
+  PAYTM_MERCHANT_WEBSITE: "DEFAULT",
+  CALLBACK_URL: "http://localhost:8080/callback",
+});
+ 
+ module.exports = paytm
+```
+
+See listing of [Room events](https://docs.livekit.io/client-sdk-js/enums/roomevent.html) and [Participant events](https://docs.livekit.io/client-sdk-js/enums/participantevent.html)
+
+  </TabItem>
+  
+  </Tabs>
+
+ 

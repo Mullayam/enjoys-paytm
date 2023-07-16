@@ -1,0 +1,58 @@
+---
+title: Response on CallBack
+sidebar_label: CallBack Response
+---
+
+`paytm.CallBack` contains `next()` function so that use can use and modify the response accordingly.
+
+```js title="Callback Route"
+app.post("/callback", paytm.CallBack, (req, res) => {
+  console.log(req.body);
+  // write your own code
+  res.end();
+});
+```
+
+Output
+
+```bash title="Output, if transaction is successful"
+  
+  body: {
+        resultInfo: {
+            resultStatus: "TXN_SUCCESS";
+            resultCode: "01";
+            resultMsg: "Txn is successful";
+        };
+        txnId: string;
+        bankTxnId: string;
+        orderId: string;
+        txnAmount: string;
+        txnType: string;
+        gatewayName: string;
+        bankName: string;
+        mid: string;
+        paymentMode: string;       
+        txnDate: string;
+        
+    };
+
+
+```
+
+```bash title="Output, if transaction is successful"
+  
+  body: {
+        resultInfo: {
+        resultStatus: "TXN_FAIL";
+            resultCode: "Failed Code";
+            resultMsg: "Message";
+        };
+        txnId: string;        
+        orderId: string;
+        txnAmount: string; 
+        mid: string;            
+        txnDate: string;        
+    };
+
+
+```

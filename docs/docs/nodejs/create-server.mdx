@@ -1,0 +1,40 @@
+---
+title: Initialize Express Server
+sidebar_label: Initialize Server
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+Install necessary Dependencies to work SDK, which requires `body-parser`,`express`
+<Tabs
+  defaultValue="javascript"
+  groupId="client-sdk"
+  values={[
+    {label: 'Javascript', value: 'javascript'},
+    
+  ]}>
+  <TabItem value="javascript">
+
+```javascript title="index.js"
+const express = require("express");
+const bodyParser = require("body-parser");
+const { PaytmConfig } = require("@enjoys/paytm");
+const app = express();
+const path = require("path");
+//highlight-start 
+app.use(bodyParser.json()); // necessary without this credentials are undefined
+app.use(express.json());  // necessary
+app.use(bodyParser.urlencoded({ extended: true }));
+ 
+const paytm = require("./instance/paytm");
+//highlight-end 
+
+app.listen(8080, () => console.log("http://localhost:8080"));
+```
+
+ 
+  </TabItem>
+  
+  </Tabs>
+ 
