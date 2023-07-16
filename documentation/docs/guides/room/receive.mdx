@@ -10,8 +10,7 @@ While connected to a room, the server may send down one or more audio/video/data
 
 Receiving tracks from the server starts with a subscription.
 
-As mentioned in our guide on [publishing media](/guides/room/publish), LiveKit models tracks with two constructs: `TrackPublication` and `Track`. Think of a `TrackPublication` as metadata for a track registered with the server and `Track` as the raw media stream.
-
+ 
 Track subscription callbacks provide your app with both the `Track` and `TrackPublication` objects.
 
 Subscribed callback will be fired on both `Room` and `RemoteParticipant` objects.
@@ -597,8 +596,7 @@ The difference between these two actions is *negotiation*. Subscribing requires 
 
 If a video track has simulcast enabled, a receiving client may want to manually specify the maximum receivable quality. This would result a quality and bandwidth reduction for the target track. This might come in handy, for instance, when an application's user interface is displaying a small thumbnail for a particular user's video track.
 
-You can see how this is used in our [React component](https://github.com/livekit/livekit-react/blob/master/src/components/ParticipantView.tsx).
-
+ 
 <Tabs
   defaultValue="typescript"
   groupId="client-sdk"

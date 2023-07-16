@@ -12,9 +12,9 @@ For events happening to a specific participant, they will also be fired on the a
 
 ## Connecting to a room
 
-Connecting to a room requires two parameters: a `url` and a `token`. The `url` points to your LiveKit server instance, which, if you followed [this guide](/guides/getting-started/#setting-up-the-server), is likely `ws://localhost:7880`.
+Connecting to a room requires two parameters: a `url` and a `token`. The `url` points to your LiveKit server instance, which, if you followed  , is likely `ws://localhost:7880`.
 
-The `token` is an access token representing the particular local participant. You can use the aformentioned guide to generate a token via CLI, or you can use our [server SDK](/references/server-sdks) to create one.
+The `token` is an access token representing the particular local participant. You can use the aformentioned guide to generate a token via CLI, or you can use our   to create one.
 
 You may also customize room options during connect.
 
@@ -75,8 +75,7 @@ room
 
 ```
 
-See listing of [Room events](https://docs.livekit.io/client-sdk-js/enums/roomevent.html) and [Participant events](https://docs.livekit.io/client-sdk-js/enums/participantevent.html)
-
+ 
   </TabItem>
   <TabItem value="react">
 
@@ -161,8 +160,7 @@ extension RoomViewController: RoomDelegate {
 }
 ```
 
-See listing of [Room events](https://docs.livekit.io/client-sdk-swift/RoomDelegate/) and [Participant events](https://docs.livekit.io/client-sdk-swift/ParticipantDelegate/)
-
+ 
 :::note
 
 On **iOS**, when connecting to unsecured hosts via ws://, you may get an error message like:
@@ -252,8 +250,7 @@ class MainActivity : AppCompatActivity(), RoomListener {
 </TabItem>
 <TabItem value="flutter">
 
-For details regarding handling changes in Flutter's declarative UI, see [handling changes](https://github.com/livekit/client-sdk-flutter#handling-changes)
-
+ 
 ```dart
 import 'package:livekit_client/livekit_client.dart';
 

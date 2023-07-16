@@ -29,10 +29,7 @@ module.exports = {
       label: "Next Js",
       collapsed: true,
       items: [
-        "nextjs/intro",
-        // "guides/room/publish",
-        // "guides/room/receive",
-        // "guides/room/data",
+        "nextjs/intro",       
       ],
     },
     {
@@ -43,11 +40,7 @@ module.exports = {
         "nodejs/create-server",
         "nodejs/configuration",
         "nodejs/use-on-routes",
-        "nodejs/response",
-
-        // "guides/room/publish",
-        // "guides/room/receive",
-        // "guides/room/data",
+        "nodejs/response", 
       ],
     },
     
