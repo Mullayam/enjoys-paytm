@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/Mullayam/enjoys-paytm/issues"
   },
-  "homepage": "https://github.com/Mullayam/enjoys-paytm#readme",
+  "homepage": "https://docs.enjoys.in/paytm-docs",
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.2.5",
