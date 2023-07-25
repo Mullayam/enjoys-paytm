@@ -3,10 +3,9 @@ title: Response on CallBack
 sidebar_label: CallBack Response
 ---
 
-`paytm.CallBack` contains `next()` function so that use can use and modify the response accordingly.
-
-```js title="Callback Route"
-app.post("/callback", paytm.CallBack, (req, res) => {
+ 
+```js title="/api/payment/response"
+app.post("/callback",  (req, res) => {
   console.log(req.body);
   // write your own code
   res.end();
@@ -17,42 +16,37 @@ Output
 
 ```bash title="Output, if transaction is successful"
   
-  body: {
-        resultInfo: {
-            resultStatus: "TXN_SUCCESS";
-            resultCode: "01";
-            resultMsg: "Txn is successful";
-        };
-        txnId: string;
-        bankTxnId: string;
-        orderId: string;
-        txnAmount: string;
-        txnType: string;
-        gatewayName: string;
-        bankName: string;
-        mid: string;
-        paymentMode: string;       
-        txnDate: string;
-        
-    };
+  {
+  BANKTXNID: 'rBgoYGINPuSaNx8RilZSuKojIr8IY',
+  CHECKSUMHASH: 'BD4oV5QVJfLpe+CtxkvJ7HY2LvVlm/q1pWslhzJwjmdgOmY3rBgoYGINPuSaNx8RilZSuKojIr8IYW4wXgT/HJMcC+n/5LcLoJOQKOGkGD8=',
+  CURRENCY: 'INR',
+  MID: 'dRdzsj09522950887104',
+  ORDERID: '468967455',
+  RESPCODE: '0000',
+  RESPMSG: 'User has not completed transaction.',
+  STATUS: 'TXN_SUCCESS',
+  TXNAMOUNT: '250.00',
+  TXNID: '20230725011080000890628935325881299'
+  }
+    ;
 
 
 ```
 
-```bash title="Output, if transaction is successful"
+```bash title="Output, if transaction is Unsuccessful"
   
-  body: {
-        resultInfo: {
-        resultStatus: "TXN_FAIL";
-            resultCode: "Failed Code";
-            resultMsg: "Message";
-        };
-        txnId: string;        
-        orderId: string;
-        txnAmount: string; 
-        mid: string;            
-        txnDate: string;        
-    };
+  {
+  BANKTXNID: 'rBgoYGINPuSaNx8RilZSuKojIr8IY',
+  CHECKSUMHASH: 'BD4oV5QVJfLpe+CtxkvJ7HY2LvVlm/q1pWslhzJwjmdgOmY3rBgoYGINPuSaNx8RilZSuKojIr8IYW4wXgT/HJMcC+n/5LcLoJOQKOGkGD8=',
+  CURRENCY: 'INR',
+  MID: 'dRdzsj09522950887104',
+  ORDERID: '468967455',
+  RESPCODE: '141',
+  RESPMSG: 'User has not completed transaction.',
+  STATUS: 'TXN_FAILURE',
+  TXNAMOUNT: '250.00',
+  TXNID: '20230725011080000890628935325881299'
+  }
 
 
 ```

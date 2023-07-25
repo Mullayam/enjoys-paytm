@@ -1,5 +1,113 @@
 ---
-title: NextJs SDKs
+title: Paytm NextJs Installation
 ---
 
-## 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+## NextJs With Pages Routes
+
+### Create a file in the api directory
+<Tabs
+  defaultValue="javascript"
+  groupId="client-sdk"
+  values={[
+    {label: 'Javascript', value: 'javascript'},
+    {label: 'Typescript', value: 'typescript'},
+    
+  ]}>
+  <TabItem value="javascript">
+
+```javascript title="/api/payment/route.js"
+import { PaytmConfig } from("@enjoys/paytm")
+const paytm = new PaytmConfig({
+  PAYTM_ENVIRONMENT: "LIVE",
+  PAYTM_MERCHANT_KEY: "rBHSFqbQmGZJ1mu7",
+  PAYTM_MERCHANT_ID: "LwKutv58548207890301",
+  PAYTM_MERCHANT_WEBSITE: "DEFAULT",
+  CALLBACK_URL: "http://localhost:8080/api/payment/response",
+});
+export default function handler(req, res ) {
+   
+  if (req.method === 'POST') {
+    paytm.InitializeTransaction(req, res)
+  } else {
+     res.status(500).json({ error: 'Unhanled Route' })
+  }
+
+}
+```
+
+  </TabItem>
+  <TabItem value="typescript">
+
+```typescript title="/api/payment/route.tsx"
+import { NextApiRequest,NextApiResponse  } from("next/server")
+import { PaytmConfig } from("@enjoys/paytm")
+const paytm = new PaytmConfig({
+    PAYTM_ENVIRONMENT: "LIVE",
+     PAYTM_MERCHANT_KEY: "rBHSFqbQmGZJ1mu7",
+    PAYTM_MERCHANT_ID: "LwKutv58548207890301",
+    PAYTM_MERCHANT_WEBSITE: "DEFAULT",
+    CALLBACK_URL: "http://localhost:8080/api/payment/response",
+    });
+
+export default function handler(req:NextApiRequest, res:NextApiResponse ) {
+   
+  if (req.method === 'POST') {
+    paytm.InitializeTransaction(req, res)
+  } else {
+     res.status(500).json({ error: 'Unhanled Route' })
+  }
+}
+```
+  </TabItem>
+  </Tabs>
+
+# NextJs With App Routes
+<Tabs
+  defaultValue="javascript"
+  groupId="client-sdk"
+  values={[
+    {label: 'Javascript', value: 'javascript'},
+    {label: 'Typscript', value: 'typscript'},
+    
+  ]}>
+  <TabItem value="javascript">
+
+```javascript title="/api/payment/route.js"
+import { PaytmConfig } from("@enjoys/paytm")
+const paytm = new PaytmConfig({
+  PAYTM_ENVIRONMENT: "LIVE",
+  PAYTM_MERCHANT_KEY: "rBHSFqbQmGZJ1mu7",
+  PAYTM_MERCHANT_ID: "LwKutv58548207890301",
+  PAYTM_MERCHANT_WEBSITE: "DEFAULT",
+  CALLBACK_URL: "http://localhost:8080/api/payment/response",
+});
+export async function POST(req, res) { 
+    paytm.InitializeTransaction(req, res)
+    return
+}
+```
+
+  </TabItem>
+  <TabItem value="typescript">
+
+```typescript title="/api/payment/route.tsx"
+import { NextRequest,NextResponse  } from("next/server")
+import { PaytmConfig } from("@enjoys/paytm")
+const paytm = new PaytmConfig({
+    PAYTM_ENVIRONMENT: "LIVE",
+     PAYTM_MERCHANT_KEY: "rBHSFqbQmGZJ1mu7",
+    PAYTM_MERCHANT_ID: "LwKutv58548207890301",
+    PAYTM_MERCHANT_WEBSITE: "DEFAULT",
+    CALLBACK_URL: "http://localhost:8080/api/payment/response",
+    });
+
+export async function POST(req:NextRequest, res:NextResponse) { 
+    paytm.InitializeTransaction(req, res)
+    return
+}
+```
+  </TabItem>
+  </Tabs>

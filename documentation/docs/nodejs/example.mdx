@@ -1,0 +1,93 @@
+---
+title: Example
+sidebar_label: Example
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+ This example shows that how can Paytm Package can be used.
+ 
+:::danger Routes
+ Have a look on Highlighted area,That `CALLBACK_URL` is same as tha `route` defined below that InitializeTransaction is called
+::: 
+:::caution Keep in mind 
+ When InitializeTransaction is called it require two properties included in POST request of body from the form defaultValue
+ - orderId (req.body.orderId)
+ - amount (req.body.amount)
+ <br/>
+  So keep that note and dont forget to pass these properties as defined , otherwise it wll throw an error<br/>
+  You cannot change these properties.
+::: 
+<Tabs
+  defaultValue="javascript"
+  groupId="client-sdk"
+  values={[
+    {label: 'Javascript', value: 'javascript'},
+    
+    
+  ]}>
+  <TabItem value="javascript">
+
+```javascript title="index.js"
+const express = require("express");
+const app = express();
+const path = require("path");
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+const { PaytmConfig } = require("../dist/Fixe");
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const paytm = new PaytmConfig({
+  PAYTM_ENVIRONMENT: "LIVE",
+  PAYTM_MERCHANT_KEY: "YOUR PAYTM_MERCHANT_KEY",
+  PAYTM_MERCHANT_ID: " YOUR PAYTM_MERCHANT_ID",
+  PAYTM_MERCHANT_WEBSITE: "DEFAULT",
+  //highlight-start 
+  CALLBACK_URL: "http://localhost:8080/callback",
+  //highlight-end 
+});
+ 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/index.html"));
+});
+app.post("/paynow", paytm.InitializeTransaction);
+//highlight-start 
+app.post("/callback",(req, res) => console.log(req.body) );
+ //highlight-end 
+app.listen(8080, () => console.log("http://localhost:8080"));
+
+```
+
+ ```html title="index.html"
+ <!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+    <form action="http://localhost:8080/paynow" method="POST">
+        <input class="form-control form-control-sm" type="text" name="orderId" value="1244"
+            aria-label=".form-control-sm example">       
+        <input class="form-control form-control-sm" type="text" name="amount" placeholder="amount"
+            aria-label=".form-control-sm example">
+        <button type="submit">Paynow</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+```
+  </TabItem>
+  
+  </Tabs>
+
+ 

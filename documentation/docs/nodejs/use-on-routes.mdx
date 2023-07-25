@@ -5,12 +5,12 @@ sidebar_label: Use on Routes
 :::caution 
  Routes Must be defined as similar to the `CALLBACK_URL`  in Paytm Instance During setup
 :::
-```javascript tittle="index.js"
-const paytm = require("./instance/paytm)
+```javascript title="index.js"
+const paytm = require("./instance/paytm.js)
 
 
 app.post("/paynow", paytm.InitializeTransaction);
-app.post("/callback", paytm.CallBack, (req, res) => {
+app.post("/callback", (req, res) => {
    console.log(req.body);
     // write your own code
     res.end()
@@ -18,13 +18,13 @@ app.post("/callback", paytm.CallBack, (req, res) => {
 
 ```
 OR
-```javascript tittle="routes.js"
+```javascript title="routes.js"
 const express = require('express')
 const router = express.Router()
 const paytm = require("./instance/paytm)
 
 router.post("/paynow", paytm.InitializeTransaction);
-router.post("/callback", paytm.CallBack, (req, res) => {
+router.post("/callback",   (req, res) => {
      console.log(req.body);
     // write your own code
     res.end()

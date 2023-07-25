@@ -17,7 +17,7 @@ import TabItem from "@theme/TabItem";
   <TabItem value="javascript">
 
 ```javascript title="./instance/paytm"
- 
+const {PaytmConfig} = require("@enjoys/paytm")
 const paytm = new PaytmConfig({
   PAYTM_ENVIRONMENT: "LIVE",
   PAYTM_MERCHANT_KEY: "rBHSFqbQmGZJ1mu7",
@@ -29,8 +29,7 @@ const paytm = new PaytmConfig({
  module.exports = paytm
 ```
 
-See listing of [Room events](https://docs.livekit.io/client-sdk-js/enums/roomevent.html) and [Participant events](https://docs.livekit.io/client-sdk-js/enums/participantevent.html)
-
+ 
   </TabItem>
   
   </Tabs>
