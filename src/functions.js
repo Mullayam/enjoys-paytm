@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// import PaytmChecksum from "./test";
 var Constants = /** @class */ (function () {
     function Constants() {
     }
@@ -57,25 +58,10 @@ var Constants = /** @class */ (function () {
     Constants.prototype.GenerateParams = function (params, settings) {
         var PaymentDetails = {
             MID: "",
-            ORDER_ID: "",
-            CUST_ID: "",
-            TXN_AMOUNT: "",
-            EMAIL: "",
-            CHANNEL_ID: "",
-            MOBILE_NO: "",
-            CALLBACK_URL: "",
-            INDUSTRY_TYPE_ID: "",
+            ORDERID: "",
         };
         PaymentDetails.MID = settings.PAYTM_MERCHANT_ID;
-        PaymentDetails.ORDER_ID = params.orderId + new Date().getTime();
-        PaymentDetails.CUST_ID = params.custId;
-        PaymentDetails.TXN_AMOUNT = params.amount;
-        PaymentDetails.EMAIL = params.email;
-        PaymentDetails.MOBILE_NO = params.phone;
-        PaymentDetails.CHANNEL_ID = "WEB";
-        PaymentDetails.CALLBACK_URL = settings.CALLBACK_URL;
-        PaymentDetails.WEBSITE = settings.PAYTM_MERCHANT_WEBSITE;
-        PaymentDetails.INDUSTRY_TYPE_ID = "Retail";
+        PaymentDetails.ORDERID = params.orderId + new Date().getTime();
         return PaymentDetails;
     };
     return Constants;

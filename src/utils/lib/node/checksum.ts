@@ -13,6 +13,7 @@ export default class PaytmChecksum {
   static decrypt(encrypted: any, key: string) {
     const decipher = crypto.createDecipheriv("AES-128-CBC", key, iv);
     let decrypted = decipher.update(encrypted, "base64", "binary");
+    console.log("decrypt",decrypted)
     try {
       decrypted += decipher.final("binary");
     } catch (e) {
@@ -47,7 +48,9 @@ export default class PaytmChecksum {
   }
 
   static async generateSignatureByString(params: string, key: string) {
+
     var salt = (await PaytmChecksum.generateRandomString(4)) as string;
+   
     return PaytmChecksum.calculateChecksum(params, key, salt);
   }
 
@@ -90,8 +93,9 @@ export default class PaytmChecksum {
     return crypto.createHash("sha256").update(finalString).digest("hex") + salt;
   }
   static calculateChecksum(params: string, key: string, salt: string) {
+    
     const hashString = PaytmChecksum.calculateHash(params, salt);
-
+     
     return PaytmChecksum.encrypt(hashString, key);
   }
 }

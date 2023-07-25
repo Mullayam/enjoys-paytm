@@ -50,6 +50,7 @@ var PaytmChecksum = /** @class */ (function () {
     PaytmChecksum.decrypt = function (encrypted, key) {
         var decipher = crypto.createDecipheriv("AES-128-CBC", key, iv);
         var decrypted = decipher.update(encrypted, "base64", "binary");
+        console.log("decrypt", decrypted);
         try {
             decrypted += decipher.final("binary");
         }

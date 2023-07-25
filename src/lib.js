@@ -39,7 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServiceProvider = void 0;
 var functions_1 = require("./functions");
 var checksum_1 = require("./utils/lib/node/checksum");
-var patym_checksum_1 = require("./utils/lib/node/patym-checksum");
 var https = require("https");
 var ServiceProvider;
 (function (ServiceProvider) {
@@ -54,22 +53,18 @@ var ServiceProvider;
                     switch (_a.label) {
                         case 0:
                             params = functions_1.default.GenerateParams(req.body, Paytm.PaytmConfig);
-                            queryParams = "mid=".concat(Paytm.PaytmConfig.PAYTM_MERCHANT_ID, "&orderId=").concat(params.ORDER_ID);
+                            queryParams = "mid=".concat(Paytm.PaytmConfig.PAYTM_MERCHANT_ID, "&orderId=").concat(params.ORDERID);
                             txn_url = functions_1.default.CreateURL(Paytm.PaytmConfig.PAYTM_ENVIRONMENT, queryParams);
                             return [4 /*yield*/, checksum_1.default.generateSignature(params, Paytm.PaytmConfig.PAYTM_MERCHANT_KEY)];
                         case 1:
                             ChecksumSignature = _a.sent();
                             inputFields = "";
-                            inputFields += "<input type=\"hidden\" name=\"CHECKSUMHASH\" value='".concat(ChecksumSignature, "'>");
+                            inputFields += "<input type=\"text\" name=\"CHECKSUMHASH\" value='".concat(ChecksumSignature, "'>");
                             Object.keys(params).forEach(function (key) {
-                                inputFields += "<input type=\"hidden\" name=\"".concat(key, "\" value=\"").concat(params[key], "\">");
+                                inputFields += "<input type=\"text\" name=\"".concat(key, "\" value=\"").concat(params[key], "\">");
                             });
-                            res.writeHead(200, { "Content-Type": "text/html" });
-                            res.write('<html><head><title>Merchant Checkout Page</title></head><body><center><h1>Please do not refresh this page...</h1></center><form method="post" action="' +
-                                txn_url +
-                                '" name="f1">' +
-                                inputFields +
-                                '</form><script type="text/javascript">document.f1.submit();</script></body></html>');
+                            res.writeHead(200, { "Content-Type": "text/html", });
+                            res.write("\n      <html>\n        <head>\n          <title>Merchant Checkout Page</title>\n        </head>\n        <body>\n            <center>\n              <h1>Please do not refresh this page...</h1>\n            </center>\n               <form method=\"post\" action=\"".concat(txn_url, "\" name=\"f1\">' \n              ").concat(inputFields, " \n            </form>\n           <script type=\"text/javascript\">document.f1.submit();</script>\n        </body>\n      </html>\n      "));
                             res.end();
                             return [2 /*return*/];
                     }
@@ -78,44 +73,15 @@ var ServiceProvider;
         };
         Paytm.prototype.CallBack = function (req, res, next) {
             return __awaiter(this, void 0, void 0, function () {
-                var body, checksumhash, result, params;
+                var PaymentDetails, checksumhash, result;
                 return __generator(this, function (_a) {
-                    body = req.body;
-                    checksumhash = body.CHECKSUMHASH;
-                    result = (0, patym_checksum_1.verifychecksum)(body, Paytm.PaytmConfig.PAYTM_MERCHANT_KEY, checksumhash);
-                    params = {
-                        MID: Paytm.PaytmConfig.PAYTM_MERCHANT_KEY,
-                        ORDERID: body.ORDERID,
+                    PaymentDetails = {
+                        MID: req.body.MID,
+                        ORDERID: req.body.ORDERID,
                     };
-                    (0, patym_checksum_1.genchecksum)(params, Paytm.PaytmConfig.PAYTM_MERCHANT_KEY, function (err, ChecksumSignature) {
-                        checksumhash = ChecksumSignature;
-                        var post_data = "JsonData=" + JSON.stringify(params);
-                        var options = {
-                            hostname: Paytm.PaytmConfig.PAYTM_ENVIRONMENT === "LIVE"
-                                ? "securegw.paytm.in"
-                                : "securegw-stage.paytm.in",
-                            port: 443,
-                            path: "/merchant-status/getTxnStatus",
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded",
-                                "Content-Length": post_data.length,
-                            },
-                        };
-                        // Set up the request
-                        var response = "";
-                        var post_req = https.request(options, function (post_res) {
-                            post_res.on("data", function (chunk) {
-                                response += chunk;
-                            });
-                            post_res.on("end", function () {
-                                req.body.response = JSON.parse(response);
-                                next();
-                            });
-                        });
-                        post_req.write(post_data);
-                        post_req.end();
-                    });
+                    checksumhash = req.body.CHECKSUMHASH;
+                    result = checksum_1.default.verifySignature(JSON.stringify(PaymentDetails), Paytm.PaytmConfig.PAYTM_MERCHANT_KEY, checksumhash);
+                    console.log(result);
                     return [2 /*return*/];
                 });
             });
@@ -162,6 +128,7 @@ var ServiceProvider;
                                 post_res.on("end", function () {
                                     return __awaiter(this, void 0, void 0, function () {
                                         return __generator(this, function (_a) {
+                                            req.body.response = response;
                                             if (response.body.resultInfo.resultCode === "01") {
                                                 status = "SUCCESS";
                                             }
@@ -185,18 +152,117 @@ var ServiceProvider;
                 });
             });
         };
-        Paytm.prototype.OnComplete = function (req, res, callBack, done) {
+        Paytm.prototype.GetTxnStatus = function (req, res) {
             return __awaiter(this, void 0, void 0, function () {
-                var response;
+                var params, post_data, options, response, post_req;
                 return __generator(this, function (_a) {
-                    response = req.body.response;
-                    done();
-                    if (callBack.redirect) {
-                        response.STATUS === "TXN_SUCCESS"
-                            ? res.redirect("".concat(callBack.onSuccess))
-                            : res.redirect("".concat(callBack.onFailure));
-                    }
+                    params = {
+                        MID: Paytm.PaytmConfig.PAYTM_MERCHANT_KEY,
+                        ORDERID: req.body.ORDERID,
+                    };
+                    post_data = "JsonData=" + JSON.stringify(params);
+                    options = {
+                        hostname: Paytm.PaytmConfig.PAYTM_ENVIRONMENT === "LIVE"
+                            ? "securegw.paytm.in"
+                            : "securegw-stage.paytm.in",
+                        port: 443,
+                        path: "/merchant-status/getTxnStatus",
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "Content-Length": post_data.length,
+                        },
+                    };
+                    response = "";
+                    post_req = https.request(options, function (post_res) {
+                        post_res.on("data", function (chunk) {
+                            response += chunk;
+                        });
+                        post_res.on("end", function () {
+                            req.body.response = JSON.parse(response);
+                            res.status(200).json({
+                                message: req.body.response.body.resultInfo,
+                                body: req.body.response,
+                            });
+                            res.end();
+                        });
+                    });
+                    post_req.write(post_data);
+                    post_req.end();
                     return [2 /*return*/];
+                });
+            });
+        };
+        Paytm.prototype.NextServer = function (req, res) {
+            return __awaiter(this, void 0, void 0, function () {
+                var paytmParams_1, checksum, post_data, queryParams_1, options_1, response_1, post_req, error_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 2, , 3]);
+                            if (!req.body.amount) {
+                                throw new Error("Amount is required");
+                            }
+                            if (!req.body.orderId) {
+                                throw new Error("OrderId is required");
+                            }
+                            paytmParams_1 = {};
+                            paytmParams_1.body = {
+                                requestType: "Payment",
+                                mid: Paytm.PaytmConfig.PAYTM_MERCHANT_ID,
+                                websiteName: Paytm.PaytmConfig.PAYTM_MERCHANT_WEBSITE,
+                                orderId: req.body.orderId,
+                                callbackUrl: Paytm.PaytmConfig.CALLBACK_URL,
+                                txnAmount: {
+                                    value: req.body.amount,
+                                    currency: "INR",
+                                },
+                                userInfo: {
+                                    custId: "",
+                                    email: "".concat(req.body.email),
+                                },
+                            };
+                            return [4 /*yield*/, checksum_1.default.generateSignature(JSON.stringify(paytmParams_1.body), Paytm.PaytmConfig.PAYTM_MERCHANT_KEY)];
+                        case 1:
+                            checksum = _a.sent();
+                            paytmParams_1.head = {
+                                signature: checksum,
+                            };
+                            post_data = JSON.stringify(paytmParams_1);
+                            queryParams_1 = "mid=".concat(Paytm.PaytmConfig.PAYTM_MERCHANT_ID, "&orderId=").concat(paytmParams_1.body.orderId);
+                            options_1 = {
+                                hostname: Paytm.PaytmConfig.PAYTM_ENVIRONMENT === "LIVE"
+                                    ? "securegw.paytm.in"
+                                    : "securegw-stage.paytm.in",
+                                port: 443,
+                                path: "/theia/api/v1/initiateTransaction?".concat(queryParams_1),
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Content-Length": post_data.length,
+                                },
+                            };
+                            response_1 = {};
+                            post_req = https.request(options_1, function (post_res) {
+                                post_res.on("data", function (chunk) {
+                                    response_1 = JSON.parse(chunk);
+                                });
+                                post_res.on("end", function () {
+                                    var _a;
+                                    var html = "\n                <html>\n               <head>\n                  <title>Happift - Payment Page</title>\n               </head>\n               <body>\n                  <center>\n                     <h1>Please do not refresh this page...</h1>\n                  </center>\n                  <form method=\"post\" action=\"https://".concat(options_1.hostname, "/theia/api/v1/showPaymentPage?").concat(queryParams_1, "\" name=\"paytm\">\n                     <table border=\"1\">\n                        <tbody>\n                           <input type=\"hidden\" name=\"mid\" value=\"").concat(Paytm.PaytmConfig.PAYTM_MERCHANT_ID, "\">\n                           <input type=\"hidden\" name=\"orderId\" value=\"").concat((_a = paytmParams_1.body) === null || _a === void 0 ? void 0 : _a.orderId, "\">\n                           <input type=\"hidden\" name=\"txnToken\" value=\"").concat(response_1.body.txnToken, "\">\n                        </tbody>\n                     </table>\n                     </form>\n                     <script type=\"text/javascript\"> document.paytm.submit(); </script>\n               </body>\n            </html>");
+                                    res.send(html);
+                                    res.end();
+                                });
+                            });
+                            post_req.write(post_data);
+                            post_req.end();
+                            return [3 /*break*/, 3];
+                        case 2:
+                            error_1 = _a.sent();
+                            res.redirect('/callback');
+                            return [3 /*break*/, 3];
+                        case 3: return [2 /*return*/];
+                    }
                 });
             });
         };

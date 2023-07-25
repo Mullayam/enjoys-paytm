@@ -45,14 +45,10 @@ export interface PaymentDetailType {
   userInfo: UserInfoType;
 }
 export interface Money {
-  currency: MoneyCurrencyAllowed;
-  value?: number;
+  currency?: "INR";
+  value?: number|string;
 }
-enum MoneyCurrencyAllowed {
-  "INR",
-  "USD",
-  "EUR",
-}
+ 
 export interface InitiateTransactionResponse {
   head: SecureResponseHeader;
   body: InitiateTransactionResponseBody;
@@ -104,21 +100,12 @@ enum PaymentStatus {
 }
 type SetParams =
   | "MID"
-  | "ORDER_ID"
-  | "CUST_ID"
-  | "TXN_AMOUNT"
-  | "EMAIL"
-  | "CHANNEL_ID"
-  | "MOBILE_NO"
-  | "CALLBACK_URL";
+  | "ORDERID"   
+   
 
 export type Params = {
   [key in SetParams]: string;
-} & {
-  WEBSITE?: PAYTM_MERCHANT_WEBSITE;
-
-  INDUSTRY_TYPE_ID: string | "Retail";
-};
+} 
 export interface RequestBodyParams {
   amount: string;
   custId: string;
@@ -156,3 +143,28 @@ export type ResponseBody = {
     authRefId?: string;
   };
 };
+
+ 
+export type userInfo = {
+  custId: any
+  email: string
+}
+export type Data = {
+  name: string
+}
+export type BodyType = {
+  requestType: string
+  mid: string
+  websiteName: string
+  orderId: string
+  callbackUrl: string
+  txnAmount: Money
+  userInfo: userInfo
+}
+export type PaytmParamsBodyServerLess = {
+  body?: BodyType
+  head?: any
+}
+export type ResponseType = {
+  data?: any
+}
