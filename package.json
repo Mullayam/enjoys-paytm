@@ -1,10 +1,10 @@
 {
   "name": "@enjoys/paytm",
   "version": "0.0.1",
-  "description": "",
-  "main": "./dist/index.js",
+  "description": "",  
+  "main": "index.js",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "tsc",
     "test": "cd test && node ./app.js",
     "dev": "tsc ./index.ts -w",
     "prepare": "npm run build && copy package*.json dist && copy README.md dist"

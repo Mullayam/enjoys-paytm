@@ -58,10 +58,10 @@ var Constants = /** @class */ (function () {
     Constants.prototype.GenerateParams = function (params, settings) {
         var PaymentDetails = {
             MID: "",
-            ORDERID: "",
+            ORDER_ID: "",
         };
         PaymentDetails.MID = settings.PAYTM_MERCHANT_ID;
-        PaymentDetails.ORDERID = params.orderId + new Date().getTime();
+        PaymentDetails.ORDER_ID = params.orderId + new Date().getTime();
         return PaymentDetails;
     };
     return Constants;

@@ -13,22 +13,19 @@ class Constants {
       return `https://securegw.paytm.in/theia/processTransaction?${queryParams}`;
     }
   }
-  async CreateChecksum(params: Params, key: string) {}
-  CreateSSOToken() {}
+  async CreateChecksum(params: Params, key: string) { }
+  CreateSSOToken() { }
   GenerateParams(
     params: RequestBodyParams,
     settings: PaytmConfigurationValidator
   ) {
     let PaymentDetails: Params = {
       MID: "",
-      ORDERID: "",      
-       
+      ORDER_ID: "",
+
     };
     PaymentDetails.MID = settings.PAYTM_MERCHANT_ID;
-    PaymentDetails.ORDERID = params.orderId + new Date().getTime();    
-        
-    
-
+    PaymentDetails.ORDER_ID = params.orderId + new Date().getTime();
     return PaymentDetails;
   }
 }

@@ -1,8 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import {  Request, Response } from "express";
 export interface StringValidator {
   InitializeTransaction(req: Request, res: Response): void;
   VerifyPaymentStatus(req: Request, res: Response): void;
-  CallBack(req: Request, res: Response, next: NextFunction): void;
 }
 
 export interface CallBack {
@@ -100,7 +99,7 @@ enum PaymentStatus {
 }
 type SetParams =
   | "MID"
-  | "ORDERID"   
+  | "ORDER_ID"   
    
 
 export type Params = {
