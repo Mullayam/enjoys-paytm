@@ -1,1 +1,1 @@
-[Documentation](https://paytm-pg-kit-docs.enjoys.in/)
+[Documentation](https://pg-kit-docs.enjoys.in/)
