@@ -13,12 +13,13 @@
     "type": "git",
     "url": "git+https://github.com/Mullayam/enjoys-paytm.git"
   },
+  "keywords": ["paytm","payment-gateway"],
   "author": "ENJOYS",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Mullayam/enjoys-paytm/issues"
   },
-  "homepage": "https://docs.enjoys.in/paytm-docs",
+  "homepage": "https://paytm-pg-kit-docs.enjoys.in/",
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.2.5",

@@ -13,8 +13,8 @@ module.exports = {
   themeConfig: {
     navbar: {
       logo: {
-        alt: "PayTM PG KIT Logo",
-        src: "img/paytm.png",
+        alt: "ENJOYS",
+        src: "https://assets-docs.b-cdn.net/assets/madeByEnjoys2.png",
       },
       items: [
         {

@@ -1,6 +1,5 @@
-import {  Request, Response } from "express";
+import { Request, Response } from "express";
 import {
-  
   PaytmConfigurationValidator,
   PaytmParamsBody,
   PaytmParamsBodyServerLess,
@@ -8,12 +7,12 @@ import {
   StringValidator,
   VerifyPaymentStatusParamsType,
 } from "./interface";
-import Constants from "./functions";
 import PaytmChecksum from "./utils/lib/node/checksum";
 import * as https from "https";
 
 export namespace ServiceProvider {
   export class Paytm implements StringValidator {
+
     private static PaytmConfig: PaytmConfigurationValidator = {
       PAYTM_ENVIRONMENT: "TEST",
       PAYTM_MERCHANT_ID: "",
@@ -24,7 +23,7 @@ export namespace ServiceProvider {
 
     constructor(config: PaytmConfigurationValidator) {
       Paytm.PaytmConfig = config;
-    }   
+    }
     async VerifyPaymentStatus(req: Request, res: Response) {
       const Body: PaytmParamsBody = req.body;
 
@@ -82,23 +81,27 @@ export namespace ServiceProvider {
       });
       post_req.write(post_data);
       post_req.end();
-    }    
+    }
     async InitializeTransaction(req: Request, res: Response) {
-
+      if (!req.body.amount || !req.body.credential) {
+        return res.status(400).json({
+          message: "credential, amount is required, pass  object to for user details",
+        });
+      }
       const paytmParams: PaytmParamsBodyServerLess = {}
       paytmParams.body = {
         requestType: "Payment",
         mid: Paytm.PaytmConfig.PAYTM_MERCHANT_ID,
         websiteName: Paytm.PaytmConfig.PAYTM_MERCHANT_WEBSITE,
-        orderId: req.body.orderId,
+        orderId: req.body.orderId || `OID${Math.floor(Math.random() * 100000)}${new Date().getTime()}`,
         callbackUrl: Paytm.PaytmConfig.CALLBACK_URL,
         txnAmount: {
           value: `${req.body.amount}.00`,
           currency: "INR",
         },
         userInfo: {
-          custId: req.body.email,
-          email: `${req.body.email}`,
+          custId: req.body.credential,
+          email: `${req.body.credential}`,
         },
       }
       const checksum = await PaytmChecksum.generateSignature(
@@ -136,7 +139,7 @@ export namespace ServiceProvider {
 
         })
         post_res.on("end", function () {
-         
+
           const html = `
                 <html>
                <head>
@@ -168,6 +171,7 @@ export namespace ServiceProvider {
 
 
     }
+   
   }
 
 }
